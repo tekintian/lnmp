@@ -1,0 +1,4 @@
+sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php53@" ./options.conf
+
+
+
