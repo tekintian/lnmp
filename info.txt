@@ -1,4 +1,15 @@
 sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php53@" ./options.conf
 
 
+安装步骤
 
+yum -y install wget screen curl python#for CentOS/Redhat
+#apt-get -y install wget screen curl python# for Debian/Ubuntu
+wget http://aliyun-oss.linuxeye.com/lnmp-full.tar.gz #阿里云经典网络内网下载
+wget http://mirrors.linuxeye.com/lnmp-full.tar.gz # 包含源码，国内外均可下载
+wget http://mirrors.linuxeye.com/lnmp.tar.gz # 不包含源码，建议仅国外主机下载
+tar xzf lnmp-full.tar.gz
+#tar xzf lnmp.tar.gz
+cd lnmp # 如果需要修改目录(安装、数据存储、Nginx日志)，请修改options.conf文件
+screen -S lnmp # 如果网路出现中断，可以执行命令`screen -R lnmp`重新连接安装窗口
+./install.sh # 请勿sh install.sh或者bash install.sh这样执行
