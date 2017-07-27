@@ -131,3 +131,15 @@ Follow the instructions in [Wiki Installation page](https://github.com/tekintian
 
 For feedback, questions, and to follow the progress of the project (Chinese): <br />
 [lnmp最新源码一键安装脚本](https://bitbucket.org/tekintian/lnmp)<br />
+
+
+在 nginx配置文件目录的 fastcgi.conf 文件中增加
+
+# 防止跨站安全设置
+fastcgi_param PHP_ADMIN_VALUE "open_basedir=$document_root/:/tmp/:/proc/";
+
+
+# 放到主机配置文件中,防止指定的目录执行脚本文件
+location ~* .*\/(download|upload|static|images)\/.*\.(php|php5|phps|asp|aspx|jsp)$ {
+	deny all;
+}

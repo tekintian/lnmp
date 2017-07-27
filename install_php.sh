@@ -77,6 +77,7 @@ while :; do echo
                       break
                     fi
                   done
+                    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php53@" ./options.conf
                 fi
                 if [ $PHP_version == 2 ]; then
                   while :; do
@@ -93,6 +94,7 @@ while :; do echo
                       break
                     fi
                   done
+                 sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php54@" ./options.conf
                 fi
                 if [ $PHP_version == 3 ]; then
                   while :; do
@@ -108,6 +110,7 @@ while :; do echo
                       break
                     fi
                   done
+                    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php55@" ./options.conf
                 fi
                 if [ $PHP_version == 4 ]; then
                   while :; do
@@ -123,6 +126,7 @@ while :; do echo
                       break
                     fi
                   done
+                    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php56@" ./options.conf
                 fi
                 if [[ $PHP_version =~ ^[5-6]$ ]]; then 
                   while :; do
@@ -137,6 +141,14 @@ while :; do echo
                       break
                     fi
                   done
+                  
+                   if [ $PHP_version == 5 ]; then
+                    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php70@" ./options.conf
+                  fi
+                   if [ $PHP_version == 6 ]; then
+                    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php71@" ./options.conf
+                  fi
+
                 fi
               fi
               break
