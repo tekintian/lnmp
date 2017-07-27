@@ -157,7 +157,8 @@ daemonize = yes
 ;;;;;;;;;;;;;;;;;;;;
 
 [$run_user]
-listen = /dev/shm/php53-cgi.sock
+; listen = /dev/shm/php53-cgi.sock
+listen = 127.0.0.1:9053
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
 listen.owner = $run_user
@@ -190,6 +191,7 @@ env[TEMP] = /tmp
 EOF
 
     [ -d "/run/shm" -a ! -e "/dev/shm" ] && sed -i 's@/dev/shm@/run/shm@' $php_install_dir/etc/php-fpm.conf $oneinstack_dir/vhost.sh $oneinstack_dir/config/nginx.conf
+    /bin/cp ../config/php53.conf $nginx_install_dir/conf/php53.conf
 
     if [ $Mem -le 3000 ]; then
       sed -i "s@^pm.max_children.*@pm.max_children = $(($Mem/3/20))@" $php_install_dir/etc/php-fpm.conf
