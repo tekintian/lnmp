@@ -128,6 +128,14 @@ while :; do echo
                   done
                     sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php56@" ./options.conf
                 fi
+
+                if [ $PHP_version == 5 ]; then
+                    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php70@" ./options.conf
+                fi
+                if [ $PHP_version == 6 ]; then
+                    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php71@" ./options.conf
+                fi
+
                 if [[ $PHP_version =~ ^[5-6]$ ]]; then 
                   while :; do
                     echo 'Please select a opcode cache of the PHP:'
@@ -142,13 +150,6 @@ while :; do echo
                     fi
                   done
                   
-                   if [ $PHP_version == 5 ]; then
-                    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php70@" ./options.conf
-                  fi
-                   if [ $PHP_version == 6 ]; then
-                    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php71@" ./options.conf
-                  fi
-
                 fi
               fi
               break
@@ -243,24 +244,6 @@ IPADDR_COUNTRY_ISP=`./include/get_ipaddr_state.py $PUBLIC_IPADDR`
 IPADDR_COUNTRY=`echo $IPADDR_COUNTRY_ISP | awk '{print $1}'`
 [ "`echo $IPADDR_COUNTRY_ISP | awk '{print $2}'`"x == '1000323'x ] && IPADDR_ISP=aliyun
 
-# del openssl for jcloud
-[ -e "/usr/local/bin/openssl" ] && rm -rf /usr/local/bin/openssl
-[ -e "/usr/local/include/openssl" ] && rm -rf /usr/local/include/openssl
-
-# Check binary dependencies packages
-. ./include/check_sw.sh
-case "${OS}" in
-  "CentOS")
-    installDepsCentOS 2>&1 | tee ${oneinstack_dir}/install_php.log
-    ;;
-  "Debian")
-    installDepsDebian 2>&1 | tee ${oneinstack_dir}/install_php.log
-    ;;
-  "Ubuntu")
-    installDepsUbuntu 2>&1 | tee ${oneinstack_dir}/install_php.log
-    ;;
-esac
-
 # init
 startTime=`date +%s`
 . ./include/memory.sh
@@ -282,20 +265,6 @@ esac
 downloadDepsSrc=1
 checkDownload 2>&1 | tee -a ${oneinstack_dir}/install_php.log
 
-# Install dependencies from source package
-installDepsBySrc 2>&1 | tee -a ${oneinstack_dir}/install_php.log
-
-# Jemalloc
-if [[ $Nginx_version =~ ^[1-3]$ ]] || [ "$DB_yn" == 'y' ]; then
-  . include/jemalloc.sh
-  Install_Jemalloc | tee -a $oneinstack_dir/install_php.log
-fi
-
-# openSSL 
-. ./include/openssl.sh
-if [[ $Tomcat_version =~ ^[1-3]$ ]] || [[ $Apache_version =~ ^[1-2]$ ]] || [[ $PHP_version =~ ^[1-6]$ ]]; then
-  Install_openSSL102 | tee -a $oneinstack_dir/install_php.log
-fi
 
 
 # PHP
@@ -396,11 +365,6 @@ if [ "${memcached_yn}" == 'y' ]; then
   [ -e "${php_install_dir}/bin/phpize" ] && [ ! -e "$(${php_install_dir}/bin/php-config --extension-dir)/memcached.so" ] && Install_php-memcached 2>&1 | tee -a ${oneinstack_dir}/install.log
 fi
 
-# index example
-if [ ! -e "${wwwroot_dir}/default/index.html" -a "${Web_yn}" == 'y' ]; then
-  . include/demo.sh
-  DEMO 2>&1 | tee -a ${oneinstack_dir}/install.log
-fi
 
 # get web_install_dir and db_install_dir
 . include/check_dir.sh
