@@ -137,6 +137,7 @@ EOF
   if [[ ! $Apache_version =~ ^[1-2]$ ]] && [ ! -e "$apache_install_dir/bin/apxs" ]; then
     # php55-fpm Init Script
     /bin/cp sapi/fpm/init.d.php-fpm /etc/init.d/php55-fpm
+    sed -i "s@^# Provides:.*@# Provides:          php55-fpm@" /etc/init.d/php55-fpm
     chmod +x /etc/init.d/php55-fpm
     [ "$OS" == 'CentOS' ] && { chkconfig --add php55-fpm; chkconfig php55-fpm on; }
     [[ $OS =~ ^Ubuntu$|^Debian$ ]] && update-rc.d php55-fpm defaults
@@ -165,8 +166,7 @@ daemonize = yes
 ;;;;;;;;;;;;;;;;;;;;
 
 [$run_user]
-;listen = /dev/shm/php55-cgi.sock
-listen = 127.0.0.1:9055
+listen = /dev/shm/php55-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
 listen.owner = $run_user

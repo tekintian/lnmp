@@ -144,6 +144,7 @@ EOF
   if [[ ! $Apache_version =~ ^[1-2]$ ]] && [ ! -e "$apache_install_dir/bin/apxs" ]; then
     # php71-fpm Init Script
     /bin/cp sapi/fpm/init.d.php-fpm /etc/init.d/php71-fpm
+    sed -i "s@^# Provides:.*@# Provides:          php71-fpm@" /etc/init.d/php71-fpm
     chmod +x /etc/init.d/php71-fpm
     [ "$OS" == 'CentOS' ] && { chkconfig --add php71-fpm; chkconfig php71-fpm on; }
     [[ $OS =~ ^Ubuntu$|^Debian$ ]] && update-rc.d php71-fpm defaults
@@ -172,8 +173,7 @@ daemonize = yes
 ;;;;;;;;;;;;;;;;;;;;
 
 [$run_user]
-;listen = /dev/shm/php71-cgi.sock
-listen = 127.0.0.1:9071
+listen = /dev/shm/php71-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
 listen.owner = $run_user
@@ -236,7 +236,7 @@ EOF
       sed -i "s@^pm.max_spare_servers.*@pm.max_spare_servers = 80@" $php_install_dir/etc/php-fpm.conf
     fi
 
-    #[ "$Web_yn" == 'n' ] && sed -i "s@^listen =.*@listen = $IPADDR:9000@" $php_install_dir/etc/php-fpm.conf
+    #[ "$Web_yn" == 'n' ] && sed -i "s@^listen =.*@listen = $IPADDR:9071@" $php_install_dir/etc/php-fpm.conf
     service php71-fpm start
 
   elif [[ $Apache_version =~ ^[1-2]$ ]] || [ -e "$apache_install_dir/bin/apxs" ]; then

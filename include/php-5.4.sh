@@ -124,6 +124,7 @@ Install_PHP54() {
   if [[ ! $Apache_version =~ ^[1-2]$ ]] && [ ! -e "$apache_install_dir/bin/apxs" ]; then
     # php54-fpm Init Script
     /bin/cp sapi/fpm/init.d.php-fpm /etc/init.d/php54-fpm
+    sed -i "s@^# Provides:.*@# Provides:          php54-fpm@" /etc/init.d/php54-fpm
     chmod +x /etc/init.d/php54-fpm
     [ "$OS" == 'CentOS' ] && { chkconfig --add php54-fpm; chkconfig php54-fpm on; }
     [[ $OS =~ ^Ubuntu$|^Debian$ ]] && update-rc.d php54-fpm defaults
@@ -152,8 +153,7 @@ daemonize = yes
 ;;;;;;;;;;;;;;;;;;;;
 
 [$run_user]
-;listen = /dev/shm/php54-cgi.sock
-listen = 127.0.0.1:9054
+listen = /dev/shm/php54-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
 listen.owner = $run_user

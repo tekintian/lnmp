@@ -144,6 +144,7 @@ EOF
   if [[ ! $Apache_version =~ ^[1-2]$ ]] && [ ! -e "$apache_install_dir/bin/apxs" ]; then
     # php70-fpm Init Script
     /bin/cp sapi/fpm/init.d.php-fpm /etc/init.d/php70-fpm
+    sed -i "s@^# Provides:.*@# Provides:          php70-fpm@" /etc/init.d/php70-fpm
     chmod +x /etc/init.d/php70-fpm
     [ "$OS" == 'CentOS' ] && { chkconfig --add php70-fpm; chkconfig php70-fpm on; }
     [[ $OS =~ ^Ubuntu$|^Debian$ ]] && update-rc.d php70-fpm defaults
@@ -172,8 +173,7 @@ daemonize = yes
 ;;;;;;;;;;;;;;;;;;;;
 
 [$run_user]
-;listen = /dev/shm/php70-cgi.sock
-listen = 127.0.0.1:9070
+listen = /dev/shm/php70-cgi.sock
 listen.backlog = -1
 listen.allowed_clients = 127.0.0.1
 listen.owner = $run_user
@@ -235,8 +235,8 @@ EOF
       sed -i "s@^pm.max_spare_servers.*@pm.max_spare_servers = 80@" $php_install_dir/etc/php-fpm.conf
     fi
 
-    #[ "$Web_yn" == 'n' ] && sed -i "s@^listen =.*@listen = $IPADDR:9000@" $php_install_dir/etc/php-fpm.conf
-    service php70/bin/cp sapi/fpm/init.d.php-fpm-fpm start
+    #[ "$Web_yn" == 'n' ] && sed -i "s@^listen =.*@listen = $IPADDR:9070@" $php_install_dir/etc/php-fpm.conf
+    service php70-fpm start
 
   elif [[ $Apache_version =~ ^[1-2]$ ]] || [ -e "$apache_install_dir/bin/apxs" ]; then
     service httpd restart

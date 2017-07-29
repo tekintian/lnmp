@@ -130,7 +130,7 @@ performance_schema = 0
 
 skip-external-locking
 
-default_storage_engine = InnoDB
+default_storage_engine = MyISAM
 innodb_file_per_table = 1
 innodb_open_files = 500
 innodb_buffer_pool_size = 64M
