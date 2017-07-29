@@ -1,1 +1,3 @@
 #Src/
+*.sublime-project
+*.sublime-workspace
