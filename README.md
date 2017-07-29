@@ -23,18 +23,16 @@ Script properties:
 
 If your server system: CentOS/Redhat (Do not enter "//" and "// subsequent sentence)
 ```bash
-yum -y install wget screen python   // For CentOS / Redhat
-wget http://mirrors.linuxeye.com/lnmp-full.tar.gz   // Contains the source code
-tar xzf lnmp-full.tar.gz
+yum -y install wget screen python git  // For CentOS / Redhat
+git clone https://bitbucket.org/tekintian/lnmp.git  // Contains the source code
 cd lnmp    // If you need to modify the directory (installation, data storage, Nginx logs), modify options.conf file
 screen -S lnmp    // if network interruption, you can execute the command `screen -r lnmp` reconnect install window
 ./install.sh   // Do not sh install.sh or bash install.sh such execution
 ```
 If your server system: Debian/Ubuntu (Do not enter "//" and "// subsequent sentence)
 ```bash
-apt-get -y install wget screen python   // For Debian / Ubuntu
-wget http://mirrors.linuxeye.com/lnmp-full.tar.gz   // Contains the source code
-tar xzf lnmp-full.tar.gz
+apt-get -y install wget screen python git  // For Debian / Ubuntu
+git clone https://bitbucket.org/tekintian/lnmp.git   // Contains the source code
 cd lnmp    // If you need to modify the directory (installation, data storage, Nginx logs), modify options.conf file
 screen -S lnmp    // if network interruption, you can execute the command `screen -r lnmp` reconnect install window
 ./install.sh   // Do not sh install.sh or bash install.sh such execution
@@ -127,7 +125,7 @@ service memcached {start|stop|status|restart|reload}
 
 ## Installation
 
-Follow the instructions in [Wiki Installation page](https://github.com/tekintian/lnmp/wiki/Installation)<br />
+Follow the instructions in [Wiki Installation page](https://bitbucket.org/tekintian/lnmp/wiki/Installation)<br />
 
 For feedback, questions, and to follow the progress of the project (Chinese): <br />
 [lnmp最新源码一键安装脚本](https://bitbucket.org/tekintian/lnmp)<br />
