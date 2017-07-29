@@ -11,6 +11,8 @@
 Install_PHP70() {
   pushd ${oneinstack_dir}/src
   
+  php_install_dir=/usr/local/php70
+
   tar xzf libiconv-$libiconv_version.tar.gz
   patch -d libiconv-$libiconv_version -p0 < libiconv-glibc-2.16.patch
   pushd libiconv-$libiconv_version
