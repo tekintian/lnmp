@@ -209,7 +209,7 @@ EOF
 
     [ -d "/run/shm" -a ! -e "/dev/shm" ] && sed -i 's@/dev/shm@/run/shm@' $php_install_dir/etc/php-fpm.conf $oneinstack_dir/vhost.sh $oneinstack_dir/config/nginx.conf
 
-    /bin/cp ../config/php71.conf $nginx_install_dir/conf/php71.conf
+    
 
     if [ $Mem -le 3000 ]; then
       sed -i "s@^pm.max_children.*@pm.max_children = $(($Mem/3/20))@" $php_install_dir/etc/php-fpm.conf
@@ -239,6 +239,8 @@ EOF
     fi
 
     #[ "$Web_yn" == 'n' ] && sed -i "s@^listen =.*@listen = $IPADDR:9071@" $php_install_dir/etc/php-fpm.conf
+    /bin/cp ${oneinstack_dir}/config/php71.conf $nginx_install_dir/conf/php71.conf
+    
     service php71-fpm start
 
   elif [[ $Apache_version =~ ^[1-2]$ ]] || [ -e "$apache_install_dir/bin/apxs" ]; then
