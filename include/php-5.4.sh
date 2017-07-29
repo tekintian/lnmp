@@ -218,6 +218,7 @@ EOF
 
     #[ "$Web_yn" == 'n' ] && sed -i "s@^listen =.*@listen = $IPADDR:9000@" $php_install_dir/etc/php-fpm.conf
      /bin/cp ${oneinstack_dir}/config/php54.conf $nginx_install_dir/conf/php54.conf
+
     service php54-fpm start
 
   elif [[ $Apache_version =~ ^[1-2]$ ]] || [ -e "$apache_install_dir/bin/apxs" ]; then
