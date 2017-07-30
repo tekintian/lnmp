@@ -37,6 +37,18 @@ cd lnmp    // If you need to modify the directory (installation, data storage, N
 screen -S lnmp    // if network interruption, you can execute the command `screen -r lnmp` reconnect install window
 ./install.sh   // Do not sh install.sh or bash install.sh such execution
 ```
+如果在选择PHP版本的时候不是选择的php5.6版本,则安装完成后需要修改相应的站点配置文件为自己所选择的PHP版本
+
+## 多版本PHP安装
+执行 install.sh完成后 在执行下面的命令安装其他的PHP工存版本[必须为 PHP-FPM模式]; 
+
+```bash
+./install_php.sh
+
+```
+安装完成后将 config目录下的 phpXX.conf 对应的PHP版本配置文件复制到 /usr/local/nginx/conf 目录
+
+
 
 ## How to add Extensions
 
