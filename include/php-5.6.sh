@@ -180,7 +180,7 @@ group = $run_user
 
 pm = dynamic
 pm.max_children = 12
-pm.start_servers = 4
+pm.start_servers = 2
 pm.min_spare_servers = 2
 pm.max_spare_servers = 12
 pm.max_requests = 2048
