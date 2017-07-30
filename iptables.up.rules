@@ -34,8 +34,7 @@ COMMIT
 -A INPUT -p tcp -m state -m tcp --dport 20000:30000 --state NEW -j ACCEPT
 -A INPUT -p tcp -m state -m tcp --dport 443 --state NEW -j ACCEPT
 -A INPUT -p tcp -m state -m tcp --dport 3306 --state NEW -j ACCEPT
--A INPUT -p tcp -m tcp -m state --dport 8901:8999 --state NEW -j ACCEPT
--A INPUT -p tcp -m tcp -m state --dport 1868:1878 --state NEW -j ACCEPT
+-A INPUT -p tcp -m tcp -m state --dport 8980:8989 --state NEW -j ACCEPT
 -A INPUT -p tcp -m tcp -m state --dport 10000 --state NEW -j ACCEPT
 -A INPUT -p icmp -m limit --limit 1/sec --limit-burst 10 -j ACCEPT
 -A INPUT -m limit -f --limit 100/sec --limit-burst 100 -j ACCEPT
