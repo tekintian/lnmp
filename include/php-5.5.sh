@@ -179,8 +179,8 @@ group = $run_user
 
 pm = dynamic
 pm.max_children = 12
-pm.start_servers = 8
-pm.min_spare_servers = 6
+pm.start_servers = 2
+pm.min_spare_servers = 1
 pm.max_spare_servers = 12
 pm.max_requests = 2048
 pm.process_idle_timeout = 10s
