@@ -12,6 +12,23 @@ DEMO() {
   pushd ${oneinstack_dir}/src
 
   [ "${IPADDR_COUNTRY}"x == "CN"x ] && /bin/cp ${oneinstack_dir}/config/index_cn.html ${wwwroot_dir}/default/index.html || /bin/cp ${oneinstack_dir}/config/index.html ${wwwroot_dir}/default
+  if [ -e "${nginx_install_dir}/sbin/nginx" ]; then
+    /bin/cp ${oneinstack_dir}/config/php53.conf /usr/local/nginx/conf/php53.conf
+    /bin/cp ${oneinstack_dir}/config/php54.conf /usr/local/nginx/conf/php54.conf
+    /bin/cp ${oneinstack_dir}/config/php55.conf /usr/local/nginx/conf/php55.conf
+    /bin/cp ${oneinstack_dir}/config/php56.conf /usr/local/nginx/conf/php56.conf
+    /bin/cp ${oneinstack_dir}/config/php70.conf /usr/local/nginx/conf/php70.conf
+    /bin/cp ${oneinstack_dir}/config/php71.conf /usr/local/nginx/conf/php71.conf
+  fi
+
+   if [ -e "${tengine_install_dir}/sbin/nginx" ]; then
+    /bin/cp ${oneinstack_dir}/config/php53.conf /usr/local/tengine/conf/php53.conf
+    /bin/cp ${oneinstack_dir}/config/php54.conf /usr/local/tengine/conf/php54.conf
+    /bin/cp ${oneinstack_dir}/config/php55.conf /usr/local/tengine/conf/php55.conf
+    /bin/cp ${oneinstack_dir}/config/php56.conf /usr/local/tengine/conf/php56.conf
+    /bin/cp ${oneinstack_dir}/config/php70.conf /usr/local/tengine/conf/php70.conf
+    /bin/cp ${oneinstack_dir}/config/php71.conf /usr/local/tengine/conf/php71.conf
+  fi
 
   if [ -e "${php_install_dir}/bin/php" ]; then
     if [ "${IPADDR_COUNTRY}"x == "CN"x ]; then
