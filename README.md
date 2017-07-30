@@ -141,3 +141,130 @@ fastcgi_param PHP_ADMIN_VALUE "open_basedir=$document_root/:/tmp/:/proc/";
 location ~* .*\/(download|upload|static|images)\/.*\.(php|php5|phps|asp|aspx|jsp)$ {
 	deny all;
 }
+
+# webmin Install
+
+---------------webmin---------------------
+Using the Webmin APT repository
+If you like to install and update Webmin via APT, edit the /etc/apt/sources.list file on your system and add the line :
+```bash
+deb http://download.webmin.com/download/repository sarge contrib
+```
+You should also fetch and install my GPG key with which the repository is signed, with the commands :
+
+```bash
+cd /root
+wget http://www.webmin.com/jcameron-key.asc
+apt-key add jcameron-key.asc
+apt-get update
+apt-get install apt-transport-https
+apt-get install webmin
+```
+All dependencies should be resolved automatically.
+
+## webmin themes
+http://theme.winfuture.it/bwtheme.wbt.gz
+
+http://webmin-theme-stressfree.googlecode.com/files/theme-stressfree-2.10.tar.gz
+
+http://cdn.turnkeylinux.org/files/attachments/theme-metal.tar
+
+# 防火墙配置
+保存IPTABLES配置信息
+```bash
+iptables-save > /root/iptables.rules
+```
+# 常用LINUX命令
+如果要查看磁盘还剩多少空间。
+```bash
+df -h 
+```
+查看当前目录的空间占用情况
+```bash
+du -h  --max-depth=1
+```
+看上面使用了du --max-depth=1 -h的命令来查找磁盘的使用情况，因为后面没有跟路径，它就默认是当前的路径。这个命令的-h参数是为了方便你读懂每个文件的大小，如果没有这个参数显示的文件大小就没有k,M,G等。执行命令后，前面n-1行的是该目录下每个文件夹的大小。最后一行显示的是该目录总的大小。
+
+# LINUX 硬盘挂载
+
+硬盘分区与挂载
+
+硬盘分区及挂载操作步骤：
+
+1. 查看未挂载的硬盘（名称为/dev/xvdb）
+```bash
+fdisk -l 
+```
+Disk /dev/xvdb doesn't contain a valid partition table
+
+2. 创建分区
+```bash
+fdisk /dev/xvdb
+
+...
+
+输入n
+
+Command (m for help):n
+
+输入p
+
+Command action
+e extended
+p primary partition (1-4)
+p
+
+输入1
+
+Partition number (1-4): 1
+
+回车
+
+First cylinder (1-2610, default 1): 
+Using default value 1
+
+回车
+
+Last cylinder, +cylinders or +size{K,M,G} (1-2610, default 2610): 
+Using default value 2610
+
+输入w
+
+Command (m for help): w
+The partition table has been altered!
+
+```
+
+3. 格式化分区
+
+# mkfs.ext3 /dev/xvdb1
+
+4. 建立挂载目录
+
+# mkdir /data
+
+5. 挂载分区
+
+# mount /dev/xvdb1 /data
+
+6. 设置开机自动挂载
+
+vi /etc/fstab
+
+在vi中输入i进入INERT模式，将光标移至文件结尾处并回车，将下面的内容复制/粘贴，然后按Esc键，输入:x保存并退出
+
+/dev/vdb1  /home  ext4  defaults  0 0
+
+ mount /dev/vdb1 /home
+
+7. 确认是否挂载成功
+
+重启服务器
+
+# reboot
+
+查看硬盘分区
+
+# df
+
+/dev/xvdb1            20635700    176196  19411268   1% /data
