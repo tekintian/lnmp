@@ -159,6 +159,7 @@ location ~* .*\/(download|upload|static|images)\/.*\.(php|php5|phps|asp|aspx|jsp
 ---------------webmin---------------------
 Using the Webmin APT repository
 If you like to install and update Webmin via APT, edit the /etc/apt/sources.list file on your system and add the line :
+<<<<<<< HEAD
 ```bash
 deb http://download.webmin.com/download/repository sarge contrib
 ```
@@ -172,6 +173,17 @@ apt-get update
 apt-get install apt-transport-https
 apt-get install webmin
 ```
+=======
+deb http://download.webmin.com/download/repository sarge contrib
+You should also fetch and install my GPG key with which the repository is signed, with the commands :
+cd /root
+wget http://www.webmin.com/jcameron-key.asc
+apt-key add jcameron-key.asc
+You will now be able to install with the commands :
+apt-get update
+apt-get install apt-transport-https
+apt-get install webmin
+>>>>>>> origin/master
 All dependencies should be resolved automatically.
 
 ## webmin themes
@@ -183,6 +195,7 @@ http://cdn.turnkeylinux.org/files/attachments/theme-metal.tar
 
 # 防火墙配置
 保存IPTABLES配置信息
+<<<<<<< HEAD
 ```bash
 iptables-save > /root/iptables.rules
 ```
@@ -195,6 +208,18 @@ df -h
 ```bash
 du -h  --max-depth=1
 ```
+=======
+iptables-save > /root/iptables.rules
+
+# 常用LINUX命令
+如果要查看磁盘还剩多少空间。
+# df -h 
+
+查看当前目录的空间占用情况
+
+# du -h  --max-depth=1
+
+>>>>>>> origin/master
 看上面使用了du --max-depth=1 -h的命令来查找磁盘的使用情况，因为后面没有跟路径，它就默认是当前的路径。这个命令的-h参数是为了方便你读懂每个文件的大小，如果没有这个参数显示的文件大小就没有k,M,G等。执行命令后，前面n-1行的是该目录下每个文件夹的大小。最后一行显示的是该目录总的大小。
 
 # LINUX 硬盘挂载
@@ -204,6 +229,7 @@ du -h  --max-depth=1
 硬盘分区及挂载操作步骤：
 
 1. 查看未挂载的硬盘（名称为/dev/xvdb）
+<<<<<<< HEAD
 ```bash
 fdisk -l 
 ```
@@ -212,6 +238,16 @@ Disk /dev/xvdb doesn't contain a valid partition table
 2. 创建分区
 ```bash
 fdisk /dev/xvdb
+=======
+
+# fdisk -l 
+
+Disk /dev/xvdb doesn't contain a valid partition table
+
+2. 创建分区
+
+# fdisk /dev/xvdb
+>>>>>>> origin/master
 
 ...
 
@@ -245,8 +281,11 @@ Using default value 2610
 Command (m for help): w
 The partition table has been altered!
 
+<<<<<<< HEAD
 ```
 
+=======
+>>>>>>> origin/master
 3. 格式化分区
 
 # mkfs.ext3 /dev/xvdb1
