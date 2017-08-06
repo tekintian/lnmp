@@ -38,8 +38,8 @@ jdk17_version=1.7.0_80
 jdk16_version=1.6.0_45
 
 # PHP
-php71_version=7.1.7
-php70_version=7.0.21
+php71_version=7.1.8
+php70_version=7.0.22
 php56_version=5.6.31
 php55_version=5.5.38
 php54_version=5.4.45
