@@ -54,7 +54,7 @@ while :; do echo
         echo -e "\t${CMSG}7${CEND}. Install php-7.2"
         read -p "Please input a number:(Default 4 press Enter) " PHP_version
         [ -z "$PHP_version" ] && PHP_version=4
-        if [[ ! $PHP_version =~ ^[1-6]$ ]]; then
+        if [[ ! $PHP_version =~ ^[1-7]$ ]]; then
           echo "${CWARNING}input error! Please only input number 1,2,3,4,5,6,7${CEND}"
         else
           while :; do echo
