@@ -51,10 +51,11 @@ while :; do echo
         echo -e "\t${CMSG}4${CEND}. Install php-5.6"
         echo -e "\t${CMSG}5${CEND}. Install php-7.0"
         echo -e "\t${CMSG}6${CEND}. Install php-7.1"
+        echo -e "\t${CMSG}7${CEND}. Install php-7.2"
         read -p "Please input a number:(Default 4 press Enter) " PHP_version
         [ -z "$PHP_version" ] && PHP_version=4
         if [[ ! $PHP_version =~ ^[1-6]$ ]]; then
-          echo "${CWARNING}input error! Please only input number 1,2,3,4,5,6${CEND}"
+          echo "${CWARNING}input error! Please only input number 1,2,3,4,5,6,7${CEND}"
         else
           while :; do echo
             read -p "Do you want to install opcode cache of the PHP? [y/n]: " PHP_cache_yn
@@ -127,16 +128,24 @@ while :; do echo
                     fi
                   done
                     sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php56@" ./options.conf
+                    sed -i "s@^php_fpm_name.*@php_fpm_name=php56-fpm@" ./options.conf
                 fi
 
                 if [ $PHP_version == 5 ]; then
                     sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php70@" ./options.conf
+                    sed -i "s@^php_fpm_name.*@php_fpm_name=php70-fpm@" ./options.conf
                 fi
                 if [ $PHP_version == 6 ]; then
                     sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php71@" ./options.conf
+                    sed -i "s@^php_fpm_name.*@php_fpm_name=php71-fpm@" ./options.conf
+                fi
+                 if [ $PHP_version == 7 ]; then
+                    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php72@" ./options.conf
+                    sed -i "s@^php_fpm_name.*@php_fpm_name=php72-fpm@" ./options.conf
                 fi
 
-                if [[ $PHP_version =~ ^[5-6]$ ]]; then 
+
+                if [[ $PHP_version =~ ^[5-7]$ ]]; then 
                   while :; do
                     echo 'Please select a opcode cache of the PHP:'
                     echo -e "\t${CMSG}1${CEND}. Install Zend OPcache"
@@ -299,6 +308,11 @@ case "${PHP_version}" in
     sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php71@" ./options.conf
     . include/php-7.1.sh
     Install_PHP71 2>&1 | tee -a ${oneinstack_dir}/install_php.log
+    ;;
+  7)
+    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php72@" ./options.conf
+    . include/php-7.2.sh
+    Install_PHP72 2>&1 | tee -a ${oneinstack_dir}/install_php.log
     ;;
 esac
 

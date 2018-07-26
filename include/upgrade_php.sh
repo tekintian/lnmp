@@ -47,11 +47,11 @@ Upgrade_PHP() {
       echo "Starting apache..."
       service httpd start
     else
-      echo "Stoping php-fpm..."
-      service php-fpm stop
+      echo "Stoping ${php_fpm_name}..."
+      service ${php_fpm_name} stop
       make install
-      echo "Starting php-fpm..."
-      service php-fpm start
+      echo "Starting ${php_fpm_name}..."
+      service ${php_fpm_name} start
     fi
     popd > /dev/null
     echo "You have ${CMSG}successfully${CEND} upgrade from ${CWARNING}$OLD_PHP_version${CEND} to ${CWARNING}${NEW_PHP_version}${CEND}"
