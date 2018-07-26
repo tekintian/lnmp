@@ -85,6 +85,10 @@ checkDownload() {
           echo "Download JDK 1.6..."
           JDK_FILE="jdk-$(echo ${jdk16_version} | awk -F. '{print $2}')u$(echo ${jdk16_version} | awk -F_ '{print $NF}')-linux-${SYS_BIG_FLAG}.bin"
           ;;
+         4)
+          echo "Download JDK 10..."
+          JDK_FILE="jdk-$(echo ${jdk10_version} | awk -F. '{print $2}')u$(echo ${jdk10_version} | awk -F_ '{print $NF}')-linux-${SYS_BIG_FLAG}.bin"
+          ;;
       esac
       echo "Download apr..."
       src_url=http://archive.apache.org/dist/apr/apr-${apr_version}.tar.gz && Download_src
@@ -521,6 +525,47 @@ checkDownload() {
           [ "$(md5sum ${FILE_NAME} | awk '{print $1}')" == "${ALISQL_TAR_MD5}" ] && break || continue
         done
         ;;
+        
+       12)
+        # MariaDB 10.3
+        if [ "${dbInstallMethods}" == '1' ]; then
+          echo "Download MariaDB 10.3 binary package..."
+          FILE_NAME=mariadb-${mariadb103_version}-${GLIBC_FLAG}-${SYS_BIT_b}.tar.gz
+          if [ "${IPADDR_COUNTRY}"x == "CN"x ]; then
+            DOWN_ADDR_MARIADB=https://mirrors.tuna.tsinghua.edu.cn/mariadb/mariadb-${mariadb103_version}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}
+            MARAIDB_TAR_MD5=$(curl -Lk ${DOWN_ADDR_MARIADB}/md5sums.txt | grep ${FILE_NAME} | awk '{print $1}')
+            [ -z "${MARAIDB_TAR_MD5}" ] && { DOWN_ADDR_MARIADB=https://mirrors.ustc.edu.cn/mariadb/mariadb-${mariadb103_version}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}; MARAIDB_TAR_MD5=$(curl -Lk ${DOWN_ADDR_MARIADB}/md5sums.txt | grep ${FILE_NAME} | awk '{print $1}'); }
+          else
+            DOWN_ADDR_MARIADB=https://downloads.mariadb.org/interstitial/mariadb-${mariadb103_version}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}
+            MARAIDB_TAR_MD5=$(curl -Lk http://archive.mariadb.org/mariadb-${mariadb103_version}/bintar-${GLIBC_FLAG}-${SYS_BIT_a}/md5sums.txt |  grep ${FILE_NAME} | awk '{print $1}')
+          fi
+        elif [ "${dbInstallMethods}" == '2' ]; then
+          echo "Download MariaDB 10.3 source package..."
+          FILE_NAME=mariadb-${mariadb103_version}.tar.gz
+          if [ "${IPADDR_COUNTRY}"x == "CN"x ]; then
+            DOWN_ADDR_MARIADB=https://mirrors.tuna.tsinghua.edu.cn/mariadb/mariadb-${mariadb103_version}/source
+            MARAIDB_TAR_MD5=$(curl -Lk ${DOWN_ADDR_MARIADB}/md5sums.txt | grep ${FILE_NAME} | awk '{print $1}')
+            [ -z "${MARAIDB_TAR_MD5}" ] && { DOWN_ADDR_MARIADB=https://mirrors.ustc.edu.cn/mariadb/mariadb-${mariadb103_version}/source; MARAIDB_TAR_MD5=$(curl -Lk ${DOWN_ADDR_MARIADB}/md5sums.txt | grep ${FILE_NAME} | awk '{print $1}'); }
+          else
+            DOWN_ADDR_MARIADB=https://downloads.mariadb.org/interstitial/mariadb-${mariadb103_version}/source
+            MARAIDB_TAR_MD5=$(curl -Lk http://archive.mariadb.org/mariadb-${mariadb103_version}/source/md5sums.txt |  grep ${FILE_NAME} | awk '{print $1}')
+          fi
+        fi
+        tryDlCount=0
+        while [ "$(md5sum ${FILE_NAME} | awk '{print $1}')" != "${MARAIDB_TAR_MD5}" ]; do
+          wget -c --no-check-certificate ${DOWN_ADDR_MARIADB}/${FILE_NAME};sleep 1
+          let "tryDlCount++"
+          [ "$(md5sum ${FILE_NAME} | awk '{print $1}')" == "${MARAIDB_TAR_MD5}" -o "${tryDlCount}" == '6' ] && break || continue
+        done
+        if [ "${tryDlCount}" == '6' ]; then
+          echo "${CFAILURE}${FILE_NAME} download failed, Please contact the author! ${CEND}"
+          kill -9 $$
+        else
+          echo "[${CMSG}${FILE_NAME}${CEND}] found."
+        fi
+        ;; 
+        
+        
     esac
   fi
   # PHP
@@ -558,6 +603,9 @@ checkDownload() {
         ;;
       6)
         src_url=http://www.php.net/distributions/php-${php71_version}.tar.gz && Download_src
+        ;;
+       7)
+        src_url=http://www.php.net/distributions/php-${php72_version}.tar.gz && Download_src
         ;;
     esac
   fi
@@ -676,7 +724,7 @@ checkDownload() {
     else
       echo "Download graphicsmagick..."
       src_url=http://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/${GraphicsMagick_version}/GraphicsMagick-${GraphicsMagick_version}.tar.gz && Download_src
-      if [[ "$PHP_version" =~ ^[5-6]$ ]]; then
+      if [[ "$PHP_version" =~ ^[5-7]$ ]]; then
         echo "Download gmagick for php 7.x..."
         src_url=https://pecl.php.net/get/gmagick-${gmagick_for_php7_version}.tgz && Download_src
       else
@@ -704,7 +752,7 @@ checkDownload() {
       src_url=${mirrorLink}/start-stop-daemon.c && Download_src
     fi
     # redis addon
-    if [[ "$PHP_version" =~ ^[5-6]$ ]]; then
+    if [[ "$PHP_version" =~ ^[5-7]$ ]]; then
       echo "Download redis pecl for php 7.x..."
       src_url=http://pecl.php.net/get/redis-${redis_pecl_for_php7_version}.tgz && Download_src
     else
@@ -716,7 +764,7 @@ checkDownload() {
   if [ "${memcached_yn}" == 'y' ]; then
     echo "Download memcached..."
     src_url=http://www.memcached.org/files/memcached-${memcached_version}.tar.gz && Download_src
-    if [[ "$PHP_version" =~ ^[5-6]$ ]]; then
+    if [[ "$PHP_version" =~ ^[5-7]$ ]]; then
       echo "Download pecl memcache for php 7.x..."
       # src_url=https://codeload.github.com/websupport-sk/pecl-memcache/zip/php7 && Download_src
       src_url=${mirrorLink}/pecl-memcache-php7.tgz && Download_src

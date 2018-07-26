@@ -139,7 +139,7 @@ while :; do echo
                     sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php71@" ./options.conf
                     sed -i "s@^php_fpm_name.*@php_fpm_name=php71-fpm@" ./options.conf
                 fi
-                 if [ $PHP_version == 7 ]; then
+                if [ $PHP_version == 7 ]; then
                     sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php72@" ./options.conf
                     sed -i "s@^php_fpm_name.*@php_fpm_name=php72-fpm@" ./options.conf
                 fi

@@ -187,6 +187,7 @@ while :; do echo
         echo -e "\t${CMSG} 9${CEND}. Install Percona-5.6"
         echo -e "\t${CMSG}10${CEND}. Install Percona-5.5"
         echo -e "\t${CMSG}11${CEND}. Install AliSQL-5.6"
+         echo -e "\t${CMSG}12${CEND}. Install MariaDB-10.3"
         read -p "Please input a number:(Default 2 press Enter) " DB_version
         [ -z "$DB_version" ] && DB_version=2
         if [ ${DB_version} -ge 1 >/dev/null 2>&1 -a ${DB_version} -le 11 >/dev/null 2>&1 ]; then
@@ -196,7 +197,7 @@ while :; do echo
             (( ${#dbrootpwd} >= 5 )) && sed -i "s+^dbrootpwd.*+dbrootpwd='$dbrootpwd'+" ./options.conf && break || echo "${CWARNING}database root password least 5 characters! ${CEND}"
           done
           # choose install methods
-          if [ ${DB_version} -ge 1 >/dev/null 2>&1 -a ${DB_version} -le 10 >/dev/null 2>&1 ]; then
+          if [ ${DB_version} -ge 1 >/dev/null 2>&1 -a ${DB_version} -le 13 >/dev/null 2>&1 ]; then
             while :; do echo
               echo "Please choose installation of the database:"
               echo -e "\t${CMSG}1${CEND}. Install database from binary package."
@@ -212,7 +213,7 @@ while :; do echo
           fi
           break
         else
-          echo "${CWARNING}input error! Please only input number 1~11${CEND}"
+          echo "${CWARNING}input error! Please only input number 1~12${CEND}"
         fi
       done
     fi
@@ -236,10 +237,11 @@ while :; do echo
         echo -e "\t${CMSG}4${CEND}. Install php-5.6"
         echo -e "\t${CMSG}5${CEND}. Install php-7.0"
         echo -e "\t${CMSG}6${CEND}. Install php-7.1"
+        echo -e "\t${CMSG}7${CEND}. Install php-7.2"
         read -p "Please input a number:(Default 4 press Enter) " PHP_version
         [ -z "$PHP_version" ] && PHP_version=4
-        if [[ ! $PHP_version =~ ^[1-6]$ ]]; then
-          echo "${CWARNING}input error! Please only input number 1,2,3,4,5,6${CEND}"
+        if [[ ! $PHP_version =~ ^[1-7]$ ]]; then
+          echo "${CWARNING}input error! Please only input number 1,2,3,4,5,6,7${CEND}"
         else
           while :; do echo
             read -p "Do you want to install opcode cache of the PHP? [y/n]: " PHP_cache_yn
@@ -309,7 +311,7 @@ while :; do echo
                     fi
                   done
                 fi
-                if [[ $PHP_version =~ ^[5-6]$ ]]; then 
+                if [[ $PHP_version =~ ^[5-7]$ ]]; then 
                   while :; do
                     echo 'Please select a opcode cache of the PHP:'
                     echo -e "\t${CMSG}1${CEND}. Install Zend OPcache"
@@ -400,7 +402,7 @@ while :; do echo
 done
 
 # check phpMyAdmin
-if [[ $PHP_version =~ ^[1-6]$ ]] || [ -e "$php_install_dir/bin/phpize" ]; then
+if [[ $PHP_version =~ ^[1-7]$ ]] || [ -e "$php_install_dir/bin/phpize" ]; then
   while :; do echo
     read -p "Do you want to install phpMyAdmin? [y/n]: " phpMyAdmin_yn
     if [[ ! $phpMyAdmin_yn =~ ^[y,n]$ ]]; then
@@ -510,7 +512,7 @@ fi
 
 # openSSL 
 . ./include/openssl.sh
-if [[ $Tomcat_version =~ ^[1-3]$ ]] || [[ $Apache_version =~ ^[1-2]$ ]] || [[ $PHP_version =~ ^[1-6]$ ]]; then
+if [[ $Tomcat_version =~ ^[1-3]$ ]] || [[ $Apache_version =~ ^[1-2]$ ]] || [[ $PHP_version =~ ^[1-7]$ ]]; then
   Install_openSSL102 | tee -a $oneinstack_dir/install.log
 fi
 
@@ -576,6 +578,10 @@ case "${DB_version}" in
     . include/alisql-5.6.sh
     Install_AliSQL56 2>&1 | tee -a $oneinstack_dir/install.log
     ;;
+   12)
+    . include/mariadb-10.3.sh
+    Install_MariaDB103 2>&1 | tee -a $oneinstack_dir/install.log
+    ;;
 esac
 
 # Apache
@@ -591,32 +597,44 @@ fi
 case "${PHP_version}" in
   1)
 	sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php53@" ./options.conf
+   sed -i "s@^php_fpm_name.*@php_fpm_name=php53-fpm@" ./options.conf
     . include/php-5.3.sh
 
     Install_PHP53 2>&1 | tee -a ${oneinstack_dir}/install.log
     ;;
   2)
 	sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php54@" ./options.conf
+   sed -i "s@^php_fpm_name.*@php_fpm_name=php54-fpm@" ./options.conf
     . include/php-5.4.sh
     Install_PHP54 2>&1 | tee -a ${oneinstack_dir}/install.log
     ;;
   3)
 	sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php55@" ./options.conf
+   sed -i "s@^php_fpm_name.*@php_fpm_name=php55-fpm@" ./options.conf
     . include/php-5.5.sh
     Install_PHP55 2>&1 | tee -a ${oneinstack_dir}/install.log
     ;;
   4)
     sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php56@" ./options.conf
+     sed -i "s@^php_fpm_name.*@php_fpm_name=php56-fpm@" ./options.conf
     . include/php-5.6.sh
     Install_PHP56 2>&1 | tee -a ${oneinstack_dir}/install.log
     ;;
   5)
     sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php70@" ./options.conf
+     sed -i "s@^php_fpm_name.*@php_fpm_name=php70-fpm@" ./options.conf
     . include/php-7.0.sh
     Install_PHP70 2>&1 | tee -a ${oneinstack_dir}/install.log
     ;;
   6)
     sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php71@" ./options.conf
+     sed -i "s@^php_fpm_name.*@php_fpm_name=php71-fpm@" ./options.conf
+    . include/php-7.1.sh
+    Install_PHP71 2>&1 | tee -a ${oneinstack_dir}/install.log
+    ;;
+  7)
+    sed -i "s@^php_install_dir.*@php_install_dir=/usr/local/php77@" ./options.conf
+     sed -i "s@^php_fpm_name.*@php_fpm_name=php72-fpm@" ./options.conf
     . include/php-7.1.sh
     Install_PHP71 2>&1 | tee -a ${oneinstack_dir}/install.log
     ;;
